@@ -1,0 +1,15 @@
+name: Build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up .NET Framework 4.8
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 4.8.x
+    - name: Build with MSBuild
+      run: msbuild /p:Configuration=Release
