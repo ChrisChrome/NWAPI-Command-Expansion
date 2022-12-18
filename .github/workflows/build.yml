@@ -2,6 +2,11 @@ name: Build .NET Framework 4.8 project
 
 on: [push]
 
+env:
+  DEPOT_DOWNLOADER_VERSION: 2.4.7 
+  SL_REFERENCES: D:\a\NwPluginAPI\SCPSL_REFERENCES\SCPSL_Data\Managed
+  UNITY_REFERENCES: D:\a\NwPluginAPI\SCPSL_REFERENCES\SCPSL_Data\Managed
+
 jobs:
   build:
     runs-on: windows-latest
@@ -12,6 +17,18 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
+    - name: Download depot downloader
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path D:\a\NwPluginAPI
+        New-Item -ItemType Directory -Force -Path D:\a\NwPluginAPI\DepotDownloader
+        Invoke-WebRequest -Uri "https://github.com/SteamRE/DepotDownloader/releases/download/DepotDownloader_${{ env.DEPOT_DOWNLOADER_VERSION }}/depotdownloader-${{ env.DEPOT_DOWNLOADER_VERSION }}.zip" -OutFile "D:\a\NwPluginAPI\depotdownloader.zip"
+        Expand-Archive -Path D:\a\NwPluginAPI\depotdownloader.zip -PassThru -DestinationPath D:\a\NwPluginAPI/DepotDownloader
+    - name: Download SCPSL references.
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path D:\a\NwPluginAPI\SCPSL_REFERENCES
+        Start-Process -NoNewWindow -Wait -FilePath "D:\a\NwPluginAPI\DepotDownloader\DepotDownloader.exe" -WorkingDirectory "D:\a\NwPluginAPI\DepotDownloader" -ArgumentList '-app 996560','-beta nightly','-betapassword ${{ secrets.NIGHTLYPASSWORD }}','-dir D:\a\NwPluginAPI\SCPSL_REFERENCES','-filelist "${{ github.workspace }}\download-files.txt"'
     - name: Restore NuGet packages
       run: dotnet restore
     - name: Build project
