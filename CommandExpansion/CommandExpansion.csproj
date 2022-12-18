@@ -21,8 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\NwPluginAPI\NwPluginAPI\NwPluginAPI.csproj" />
-	  <ProjectReference Include="..\Analyzers\NWPluginAPI.Analyzers\NwPluginAPI.Analyzers.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+		<PackageReference Include="Northwood.PluginAPI" Version="12.0.0-rc.4" />
 	</ItemGroup>
 
 	<ItemGroup>
