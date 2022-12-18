@@ -37,4 +37,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: binaries
-        path: D:\a\NWAPI-Command-Expansion\NWAPI-Command-Expansion\CommandExpansion\bin\Release\net48\CommandExpansion.dll
+        path: |
+          **/bin/
